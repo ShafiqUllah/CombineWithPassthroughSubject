@@ -24,6 +24,15 @@ class ContentViewViewModel: ObservableObject{
         
         APICalller.shared.fetchData()
             .receive(on: DispatchQueue.main, options: .none)
+            .map({ vals in
+                vals.map { v  -> String in
+                    if v == "e"{
+                        return v
+                    }else{
+                        return v + " x"
+                    }
+                }
+            })
             .sink { error in
                 switch error {
                 case .failure(let error):
@@ -36,9 +45,6 @@ class ContentViewViewModel: ObservableObject{
                 values.forEach { value in
                     self.listOfItems.append(ListItemModel(id: UUID().uuidString, title: value))
                 }
-                
-                
-                
             }
             .store(in: &cancellable)
         
